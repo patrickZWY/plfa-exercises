@@ -220,6 +220,18 @@ trichotomy2 : ∀ (m n : ℕ) → m < n → ¬ (n < m)
 trichotomy2 zero (suc n) p ()
 trichotomy2 (suc m) (suc n) (s<s p) (s<s q) = trichotomy2 m n p q
 
+trichotomy3 : ∀ (m n : ℕ) → m ≡ n → ¬ (m < n)
+trichotomy3 m .m refl = <-irreflexive m  
+
+trichotomy4 : ∀ (m n : ℕ) → m ≡ n → ¬ (n < m)
+trichotomy4 m .m refl = <-irreflexive m
+
+trichotomy5 : ∀ (m n : ℕ) → n < m → ¬ (n ≡ m)
+trichotomy5 m n p = trichotomy1 n m p 
+
+trichotomy6 : ∀ (m n : ℕ) → n < m → ¬ (m < n)
+trichotomy6 m n p = trichotomy2 n m p
+
 
 ```
 
