@@ -19,6 +19,7 @@ open import Data.Empty using (⊥; ⊥-elim)
 open import Data.Sum using (_⊎_; inj₁; inj₂)
 open import Data.Product using (_×_)
 open import plfa.part1.Isomorphism using (_≃_; extensionality)
+open import plfa.part1.Relations using (_<_; z<s; s<s)
 ```
 
 
@@ -96,7 +97,7 @@ We cannot show that `¬ ¬ A` implies `A`, but we can show that
 ```agda
 ¬¬¬-elim : ∀ {A : Set}
   → ¬ ¬ ¬ A
-    -------
+    ------- expects ((A → ⊥) → ⊥) → ⊥ and we have ((A → ⊥) → ⊥) from ¬¬-intro 
   → ¬ A
 ¬¬¬-elim ¬¬¬x  =  λ x → ¬¬¬x (¬¬-intro x)
 ```
@@ -190,7 +191,11 @@ Using negation, show that
 is irreflexive, that is, `n < n` holds for no `n`.
 
 ```agda
--- Your code goes here
+<-irreflexive : ∀ (n : ℕ) → ¬ (n < n)
+<-irreflexive zero ()
+<-irreflexive (suc n) (s<s p) =
+  <-irreflexive n p
+
 ```
 
 
@@ -208,7 +213,14 @@ Here "exactly one" means that not only one of the three must hold,
 but that when one holds the negation of the other two must also hold.
 
 ```agda
--- Your code goes here
+trichotomy1 : ∀ (m n : ℕ) → m < n → ¬ (m ≡ n)
+trichotomy1 m .m p refl = <-irreflexive m p
+
+trichotomy2 : ∀ (m n : ℕ) → m < n → ¬ (n < m)
+trichotomy2 zero (suc n) p ()
+trichotomy2 (suc m) (suc n) (s<s p) (s<s q) = trichotomy2 m n p q
+
+
 ```
 
 #### Exercise `⊎-dual-×` (recommended)
