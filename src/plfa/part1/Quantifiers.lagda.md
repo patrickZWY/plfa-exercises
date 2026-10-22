@@ -90,9 +90,17 @@ dependent product is ambiguous.
 
 Show that universals distribute over conjunction:
 ```agda
-postulate
-  ∀-distrib-× : ∀ {A : Set} {B C : A → Set} →
-    (∀ (x : A) → B x × C x) ≃ (∀ (x : A) → B x) × (∀ (x : A) → C x)
+-- postulate
+--   ∀-distrib-× : ∀ {A : Set} {B C : A → Set} →
+--     (∀ (x : A) → B x × C x) ≃ (∀ (x : A) → B x) × (∀ (x : A) → C x)
+
+∀-distrib-× : ∀ {A : Set} {B C : A → Set} →
+  (∀ (x : A) → B x × C x) ≃ (∀ (x : A) → B x) × (∀ (x : A) → C x)
+∀-distrib-× = record { to = λ x → ⟨ (λ x₁ → x x₁ .proj₁) , (λ x₁ → x x₁ .proj₂) ⟩ 
+                      ; from = λ x x₁ → ⟨ x .proj₁ x₁ , x .proj₂ x₁ ⟩ 
+                      ; from∘to = λ x → refl 
+                      ; to∘from = λ y → refl 
+                      } 
 ```
 Compare this with the result (`→-distrib-×`) in
 Chapter [Connectives](/Connectives/).
@@ -101,9 +109,14 @@ Chapter [Connectives](/Connectives/).
 
 Show that a disjunction of universals implies a universal of disjunctions:
 ```agda
-postulate
-  ⊎∀-implies-∀⊎ : ∀ {A : Set} {B C : A → Set} →
-    (∀ (x : A) → B x) ⊎ (∀ (x : A) → C x) → ∀ (x : A) → B x ⊎ C x
+-- postulate
+--   ⊎∀-implies-∀⊎ : ∀ {A : Set} {B C : A → Set} →
+--     (∀ (x : A) → B x) ⊎ (∀ (x : A) → C x) → ∀ (x : A) → B x ⊎ C x
+
+⊎∀-implies-∀⊎ : ∀ {A : Set} {B C : A → Set} →
+  (∀ (x : A) → B x) ⊎ (∀ (x : A) → C x) → ∀ (x : A) → B x ⊎ C x
+⊎∀-implies-∀⊎ (inj₁ x) = λ x₁ → inj₁ (x x₁)
+⊎∀-implies-∀⊎ (inj₂ y) = λ x → inj₂ (y x) 
 ```
 Does the converse hold? If so, prove; if not, explain why.
 
